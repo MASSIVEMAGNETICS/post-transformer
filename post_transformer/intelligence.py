@@ -349,7 +349,7 @@ class PostTransformerIntelligence:
         print("\nSUMMARY OF AUTONOMOUS OPERATION")
         print(f"Total cycles: {self.cycle_count}")
         print(f"Duration: {duration:.2f}s")
-        print(f"Cycles per second: {self.cycle_count / duration:.2f}")
+        print(f"Cycles per second: {self.cycle_count / duration if duration > 0 else 0:.2f}")
         
         if self.metrics['free_energy']:
             print(f"\nFree Energy: {np.mean(self.metrics['free_energy'][-10:]):.3f} "
@@ -404,8 +404,8 @@ class PostTransformerIntelligence:
         # Inference state
         report_parts.append("\n[ACTIVE INFERENCE]")
         report_parts.append(f"Belief state dimension: {self.inference_engine.state_dim}")
-        report_parts.append(f"Recent free energy: {self.inference_engine.free_energy_history[-1] if self.inference_engine.free_energy_history else 'N/A':.3f}")
-        report_parts.append(f"Recent prediction error: {self.inference_engine.prediction_errors[-1] if self.inference_engine.prediction_errors else 'N/A':.3f}")
+        report_parts.append(f"Recent free energy: {self.inference_engine.free_energy_history[-1]:.3f}" if self.inference_engine.free_energy_history else "Recent free energy: N/A")
+        report_parts.append(f"Recent prediction error: {self.inference_engine.prediction_errors[-1]:.3f}" if self.inference_engine.prediction_errors else "Recent prediction error: N/A")
         
         # Awareness state
         report_parts.append("\n[ACTIVE AWARENESS]")

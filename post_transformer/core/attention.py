@@ -303,9 +303,11 @@ class ActiveAttentionMechanism:
         if not self.current_focus:
             return {}
         
-        # Softmax over values
+        # Softmax over values (numerically stable)
         values = np.array([t.total_value for t in self.current_focus])
-        weights = np.exp(values) / np.sum(np.exp(values))
+        max_val = np.max(values) if len(values) > 0 else 0
+        exp_values = np.exp(values - max_val)
+        weights = exp_values / np.sum(exp_values)
         
         distribution = {
             target.id: float(weight)

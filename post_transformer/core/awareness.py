@@ -39,14 +39,16 @@ class ActiveAwarenessSystem:
     - Temporal awareness (past patterns, future expectations)
     """
     
-    def __init__(self, history_size: int = 100):
+    def __init__(self, history_size: int = 100, learning_rate: float = 0.1):
         """
         Initialize the Active Awareness System
         
         Args:
             history_size: Number of historical states to maintain
+            learning_rate: Learning rate for metacognitive updates
         """
         self.history_size = history_size
+        self.learning_rate = learning_rate
         
         # Current awareness state
         self.current_state = AwarenessState(timestamp=time.time())
@@ -196,7 +198,7 @@ class ActiveAwarenessSystem:
         
         # Metacognitive monitoring
         if belief_state is not None and prediction_error is not None:
-            self.metacognitive_monitoring(belief_state, prediction_error, 0.1)
+            self.metacognitive_monitoring(belief_state, prediction_error, self.learning_rate)
         
         # Update temporal awareness
         self.update_temporal_awareness()
