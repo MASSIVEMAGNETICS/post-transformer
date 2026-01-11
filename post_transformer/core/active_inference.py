@@ -26,7 +26,7 @@ class BeliefState:
     
     def update(self, prediction_error: np.ndarray, learning_rate: float = 0.1):
         """Update beliefs based on prediction error"""
-        self.mean += learning_rate * self.precision * prediction_error
+        self.mean += learning_rate * (self.precision @ prediction_error)
 
 
 @dataclass
@@ -114,8 +114,8 @@ class ActiveInferenceEngine:
         
         # Precision-weighted error (confidence-weighted)
         # Higher precision = more confidence = larger weight
-        obs_precision = np.eye(self.obs_dim) * np.mean(np.diag(self.belief.precision))
-        weighted_error = obs_precision @ error
+        precision_scalar = np.mean(np.diag(self.belief.precision))
+        weighted_error = precision_scalar * error
         
         # Magnitude for tracking
         magnitude = np.linalg.norm(weighted_error)
